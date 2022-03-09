@@ -11,13 +11,12 @@ type DataType = {
 const ItemContainer = styled.div`
     background-color: #ffff;
     display: flex;
-    justify-content: center;
     align-items: center;
     flex-direction: column;
-    padding: 0.5rem;
-    margin: 0.2rem;
-    max-width: 180px;
-    max-height: 250px;
+    padding: 7px;
+    margin: 12px;
+    width: 200px;
+    height: 250px;
     border-radius: 15px;
 `;
 
@@ -29,6 +28,7 @@ const ItemInfoContainer = styled.div`
 const ItemImg = styled.img`
     width: 140px;
     height: 140px;
+    border-radius: 4px;
 `;
 
 const ItemId = styled.div`

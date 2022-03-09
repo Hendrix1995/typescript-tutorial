@@ -1,18 +1,23 @@
 import styled from "styled-components";
 
+interface Props {
+    limitChangeHandler: any;
+}
+
 const DropdownContainer = styled.select`
-    margin: 1em;
-    width: 100px;
+    margin: 12px;
+    padding: 4px 0;
+    width: 110px;
+    border: solid 3px #6d6dfd;
+    border-radius: 4px;
 `;
 
-const Option = styled.option``;
-
-function FilterDropdown() {
+function FilterDropdown({ limitChangeHandler }: Props) {
     return (
-        <DropdownContainer>
-            <Option>10개씩 보기</Option>
-            <Option>20개씩 보기</Option>
-            <Option>30개씩 보기</Option>
+        <DropdownContainer onChange={(e) => limitChangeHandler(e)}>
+            <option value="10">10개씩 보기</option>
+            <option value="20">20개씩 보기</option>
+            <option value="30">30개씩 보기</option>
         </DropdownContainer>
     );
 }
