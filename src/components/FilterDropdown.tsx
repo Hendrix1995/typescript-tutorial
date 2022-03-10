@@ -15,9 +15,9 @@ const DropdownContainer = styled.select`
 function FilterDropdown({ limitChangeHandler }: Props) {
     return (
         <DropdownContainer onChange={(e) => limitChangeHandler(e)}>
-            <option value="10">10개씩 보기</option>
-            <option value="20">20개씩 보기</option>
-            <option value="30">30개씩 보기</option>
+            <option value={10}>10개씩 보기</option>
+            <option value={20}>20개씩 보기</option>
+            <option value={30}>30개씩 보기</option>
         </DropdownContainer>
     );
 }

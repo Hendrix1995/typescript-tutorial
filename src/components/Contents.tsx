@@ -1,4 +1,3 @@
-import React from "react";
 import styled from "styled-components";
 
 type DataType = {
@@ -14,7 +13,6 @@ const ItemContainer = styled.div`
     align-items: center;
     flex-direction: column;
     padding: 7px;
-    margin: 12px;
     width: 200px;
     height: 250px;
     border-radius: 15px;

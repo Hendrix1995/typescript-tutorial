@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -6,8 +6,6 @@ import { useQuery } from "react-query";
 import FilterDropdown from "./components/FilterDropdown";
 import Contents from "./components/Contents";
 import Pagination from "./components/Pagination";
-
-document.cookie = "_ga=GA1.2.416298614.1646716579; SameSite=Lax";
 
 type DataType = {
     id: number;
@@ -17,13 +15,14 @@ type DataType = {
 };
 
 const ItemContainer = styled.div`
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, auto));
     justify-content: space-around;
-    align-items: center;
-    flex-wrap: wrap;
+    gap: 12px;
+    padding: 12px;
     background-color: rgba(207, 207, 207, 0.6);
     border-radius: 12px;
-    margin: 30px;
+    margin: 12px;
 `;
 
 function App() {
@@ -36,7 +35,7 @@ function App() {
         return data;
     };
 
-    const { isLoading, data, isError } = useQuery(["items", limit, skip], getDataHandler);
+    const { isLoading, data, isError } = useQuery(["items", { limit, skip, currentPage }], getDataHandler);
 
     const limitChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setLimit(Number(e.target.value));
@@ -62,8 +61,18 @@ function App() {
     return (
         <>
             <FilterDropdown limitChangeHandler={limitChangeHandler} />
-            <ItemContainer>{!isLoading && data.products.map((item: DataType) => <Contents key={item.id} id={item.id} title={item.title} price={item.price} images={item.images} />)}</ItemContainer>
-            <Pagination limit={limit} pageChangedHandler={pageChangedHandler} currentPage={currentPage} />
+            {isLoading ? (
+                <div>Loading...</div>
+            ) : (
+                <>
+                    <ItemContainer>
+                        {data.products.map((item: DataType) => (
+                            <Contents key={item.id} id={item.id} title={item.title} price={item.price} images={item.images} />
+                        ))}
+                    </ItemContainer>
+                    <Pagination limit={limit} pageChangedHandler={pageChangedHandler} currentPage={currentPage} />
+                </>
+            )}
         </>
     );
 }

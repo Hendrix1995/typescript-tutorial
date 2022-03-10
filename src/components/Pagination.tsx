@@ -1,11 +1,4 @@
-import React from "react";
 import styled from "styled-components";
-
-interface Props {
-    limit: number;
-    pageChangedHandler: (e: number) => void;
-    currentPage: number;
-}
 
 const PaginationContainer = styled.div`
     display: flex;
@@ -31,7 +24,7 @@ const CurrentPageNumber = styled.div`
     color: #6d6dfd;
 `;
 
-function Pagination({ limit, pageChangedHandler, currentPage }: Props) {
+function Pagination({ limit, pageChangedHandler, currentPage }: { limit: number; pageChangedHandler: (e: number) => void; currentPage: number }) {
     const pageNumArr = [];
     for (let i = 1; i <= Math.ceil(100 / limit); i++) {
         pageNumArr.push(i);
