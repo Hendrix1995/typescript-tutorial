@@ -38,11 +38,11 @@ function App() {
 
     const { isLoading, data, isError } = useQuery(["items", limit, skip], getDataHandler);
 
-    const limitChangeHandler = (e: any) => {
-        setLimit(e.target.value);
+    const limitChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+        setLimit(Number(e.target.value));
     };
 
-    const pageChangedHandler = (pageNum: any) => {
+    const pageChangedHandler = (pageNum: number) => {
         setCurrentPage(pageNum);
     };
 

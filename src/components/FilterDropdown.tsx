@@ -1,7 +1,7 @@
 import styled from "styled-components";
 
 interface Props {
-    limitChangeHandler: any;
+    limitChangeHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const DropdownContainer = styled.select`

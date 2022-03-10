@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 interface Props {
     limit: number;
-    pageChangedHandler: any;
+    pageChangedHandler: (e: number) => void;
     currentPage: number;
 }
 
