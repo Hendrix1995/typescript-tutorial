@@ -56,13 +56,13 @@ function App() {
         }
     }, [skip]);
 
-    if (isError) return <div>다시 시도해 주세요</div>;
+    if (isError) return <div style={{ display: "flex", justifyContent: "center" }}>다시 시도해 주세요</div>;
 
     return (
         <>
             <FilterDropdown limitChangeHandler={limitChangeHandler} />
             {isLoading ? (
-                <div>Loading...</div>
+                <div style={{ display: "flex", justifyContent: "center" }}>Loading...</div>
             ) : (
                 <>
                     <ItemContainer>

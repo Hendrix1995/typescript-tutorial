@@ -41,7 +41,7 @@ function Contents({ id, title, price, images }: DataType) {
                 <ItemId>{id}</ItemId>
                 <div>{title}</div>
             </ItemInfoContainer>
-            <div>$ {price}</div>
+            <div>$ {price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</div>
         </ItemContainer>
     );
 }
