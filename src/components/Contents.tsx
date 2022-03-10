@@ -43,7 +43,7 @@ function Contents({ id, title, price, images }: DataType) {
                 <ItemId>{id}</ItemId>
                 <div>{title}</div>
             </ItemInfoContainer>
-            <div>${price}</div>
+            <div>$ {price}</div>
         </ItemContainer>
     );
 }

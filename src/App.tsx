@@ -7,6 +7,8 @@ import FilterDropdown from "./components/FilterDropdown";
 import Contents from "./components/Contents";
 import Pagination from "./components/Pagination";
 
+document.cookie = "_ga=GA1.2.416298614.1646716579; SameSite=Lax";
+
 type DataType = {
     id: number;
     title: string;
