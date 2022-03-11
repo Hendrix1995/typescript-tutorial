@@ -6,6 +6,7 @@ import { useQuery } from "react-query";
 import FilterDropdown from "./components/FilterDropdown";
 import Contents from "./components/Contents";
 import Pagination from "./components/Pagination";
+import Skeleton from "./components/Skeleton";
 
 type DataType = {
     id: number;
@@ -72,11 +73,23 @@ function App() {
 
     if (isError) return <div style={{ display: "flex", justifyContent: "center" }}>다시 시도해 주세요</div>;
 
+    const limitArr = [];
+    for (let i = 1; i <= limit; i++) {
+        limitArr.push(i);
+    }
+
     return (
         <>
             <FilterDropdown limitChangeHandler={limitChangeHandler} limit={limit} />
             {isLoading ? (
-                <div style={{ display: "flex", justifyContent: "center" }}>Loading...</div>
+                <>
+                    <ItemContainer>
+                        {limitArr.map((el: number) => (
+                            <Skeleton key={el} />
+                        ))}
+                    </ItemContainer>
+                    <Pagination limit={limit} pageChangedHandler={pageChangedHandler} currentPage={currentPage} />
+                </>
             ) : (
                 <>
                     <ItemContainer>
