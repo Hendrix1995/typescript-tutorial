@@ -18,8 +18,9 @@ function FilterDropdown({ limitChangeHandler, limit }: Props) {
 
     return (
         <DropdownContainer onChange={(e) => limitChangeHandler(e)}>
-            {options.map((option) => (
-                <option key={option} value={option} selected={option === limit}>{`${option}개씩 보기`}</option>
+            <option selected disabled>{`${limit}개씩 보기`}</option>
+            {options.map((option, index) => (
+                <option key={index} value={option}>{`${option}개씩 보기`}</option>
             ))}
         </DropdownContainer>
     );
