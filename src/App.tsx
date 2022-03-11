@@ -25,9 +25,20 @@ const ItemContainer = styled.div`
     margin: 12px;
 `;
 
+const url = new URL(window.location.href);
+const urlSearchParams = url.searchParams;
+
+const getLimit = () => {
+    return urlSearchParams.get("limit") === null ? 10 : Number(urlSearchParams.get("limit"));
+};
+
+const getPage = () => {
+    return urlSearchParams.get("page") === null ? 1 : Number(urlSearchParams.get("page"));
+};
+
 function App() {
-    const [limit, setLimit] = useState<number>(10);
-    const [currentPage, setCurrentPage] = useState<number>(1);
+    const [limit, setLimit] = useState<number>(getLimit());
+    const [currentPage, setCurrentPage] = useState<number>(getPage());
     const [skip, setSkip] = useState<number>(0);
 
     const getDataHandler = async () => {
@@ -46,7 +57,10 @@ function App() {
     };
 
     useEffect(() => {
-        setSkip((currentPage - 1) * limit);
+        setSkip((Number(currentPage) - 1) * limit);
+        urlSearchParams.set("limit", String(limit));
+        urlSearchParams.set("page", String(currentPage));
+        window.history.replaceState("replace", "null", url.href);
     }, [limit, currentPage]);
 
     useEffect(() => {
@@ -60,7 +74,7 @@ function App() {
 
     return (
         <>
-            <FilterDropdown limitChangeHandler={limitChangeHandler} />
+            <FilterDropdown limitChangeHandler={limitChangeHandler} limit={limit} />
             {isLoading ? (
                 <div style={{ display: "flex", justifyContent: "center" }}>Loading...</div>
             ) : (

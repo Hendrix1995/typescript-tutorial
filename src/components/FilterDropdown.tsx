@@ -2,6 +2,7 @@ import styled from "styled-components";
 
 interface Props {
     limitChangeHandler: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+    limit: number;
 }
 
 const DropdownContainer = styled.select`
@@ -12,12 +13,14 @@ const DropdownContainer = styled.select`
     border-radius: 4px;
 `;
 
-function FilterDropdown({ limitChangeHandler }: Props) {
+function FilterDropdown({ limitChangeHandler, limit }: Props) {
+    const options = [10, 20, 30];
+
     return (
         <DropdownContainer onChange={(e) => limitChangeHandler(e)}>
-            <option value="10">10개씩 보기</option>
-            <option value="20">20개씩 보기</option>
-            <option value="30">30개씩 보기</option>
+            {options.map((option) => (
+                <option key={option} value={option} selected={option === limit}>{`${option}개씩 보기`}</option>
+            ))}
         </DropdownContainer>
     );
 }
