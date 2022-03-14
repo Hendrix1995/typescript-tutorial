@@ -11,6 +11,7 @@ const PageNumber = styled.div`
     padding: 0 12px;
     cursor: pointer;
     transition: 260ms ease-in-out;
+    text-shadow: gray 4px 4px 4px;
 
     &:hover {
         opacity: 0.4;

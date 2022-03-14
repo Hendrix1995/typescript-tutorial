@@ -11,6 +11,7 @@ const DropdownContainer = styled.select`
     width: 110px;
     border: solid 3px #8884d8;
     border-radius: 4px;
+    box-shadow: gray 2px 2px 2px;
 `;
 
 function FilterDropdown({ limitChangeHandler, limit }: Props) {

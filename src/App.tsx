@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "react-query";
+import { useNavigate } from "react-router-dom";
 
 import FilterDropdown from "./components/FilterDropdown";
 import Contents from "./components/Contents";
 import Pagination from "./components/Pagination";
 import Skeleton from "./components/Skeleton";
-import Chart from "./components/Chart";
 
 type DataType = {
     id: number;
@@ -27,6 +27,38 @@ const ItemContainer = styled.div`
     margin: 12px;
 `;
 
+export const PageButton = styled.button`
+    font-size: 20px;
+    border: solid 2px;
+    border-radius: 4px;
+    box-shadow: gray 2px 2px 2px;
+    transition: 140ms ease-in-out;
+    margin: 12px;
+    cursor: pointer;
+
+    &:hover {
+        box-shadow: gray 4px 4px 4px;
+    }
+
+    &:before,
+    &:after {
+        content: "";
+        position: absolute;
+        width: 0;
+        transition: ease all;
+    }
+
+    &:hover:before,
+    &:hover:after {
+        width: 100%;
+        transition: ease all;
+    }
+
+    &:active {
+        box-shadow: none;
+    }
+`;
+
 const url = new URL(window.location.href);
 const urlSearchParams = url.searchParams;
 
@@ -39,6 +71,8 @@ const getPage = () => {
 };
 
 function App() {
+    const navigate = useNavigate();
+
     const [limit, setLimit] = useState<number>(getLimit());
     const [currentPage, setCurrentPage] = useState<number>(getPage());
     const [skip, setSkip] = useState<number>(0);
@@ -81,7 +115,10 @@ function App() {
 
     return (
         <>
-            <FilterDropdown limitChangeHandler={limitChangeHandler} limit={limit} />
+            <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
+                <FilterDropdown limitChangeHandler={limitChangeHandler} limit={limit} />
+                <PageButton onClick={() => navigate("/chart")}>Go to Chart</PageButton>
+            </div>
             {isLoading ? (
                 <>
                     <ItemContainer>
@@ -99,7 +136,6 @@ function App() {
                         ))}
                     </ItemContainer>
                     <Pagination limit={limit} pageChangedHandler={pageChangedHandler} currentPage={currentPage} />
-                    <Chart data={data} />
                 </>
             )}
         </>
