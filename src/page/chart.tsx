@@ -4,6 +4,7 @@ import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "react-query";
 import { PageButton } from "../App";
+import { useNavigate } from "react-router-dom";
 
 import DateFilter from "../components/chart/DateFilter";
 import Charts from "../components/chart/Charts";
@@ -60,11 +61,12 @@ const replaceNumHandler = (num: number) => {
 };
 
 function chart() {
+    const navigate = useNavigate();
     const { isLoading, data, isError } = useQuery("total", getTotalHandler);
 
     return (
         <>
-            <PageButton>Go to Home</PageButton>
+            <PageButton onClick={() => navigate("/")}>Go to Home</PageButton>
             {isLoading ? (
                 <div>Loading...</div>
             ) : (

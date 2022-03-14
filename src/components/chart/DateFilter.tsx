@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -98,6 +98,8 @@ function DateFilter() {
     const endDateHandler = (date: string) => {
         setEndDate(date);
     };
+
+    const searchParams = () => {};
 
     const getDateHandler = async () => {
         const { data } = await axios.get(`http://dev-admin.ittang.co.kr/api/statistic/user?startDate=${startDate}&endDate=${endDate}`, {
