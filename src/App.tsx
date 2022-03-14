@@ -7,6 +7,7 @@ import FilterDropdown from "./components/FilterDropdown";
 import Contents from "./components/Contents";
 import Pagination from "./components/Pagination";
 import Skeleton from "./components/Skeleton";
+import Chart from "./components/Chart";
 
 type DataType = {
     id: number;
@@ -98,6 +99,7 @@ function App() {
                         ))}
                     </ItemContainer>
                     <Pagination limit={limit} pageChangedHandler={pageChangedHandler} currentPage={currentPage} />
+                    <Chart data={data} />
                 </>
             )}
         </>

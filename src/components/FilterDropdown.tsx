@@ -9,7 +9,7 @@ const DropdownContainer = styled.select`
     margin: 12px;
     padding: 4px 0;
     width: 110px;
-    border: solid 3px #6d6dfd;
+    border: solid 3px #8884d8;
     border-radius: 4px;
 `;
 
