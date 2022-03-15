@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import styled from "styled-components";
 import axios from "axios";
 import { useQuery } from "react-query";
@@ -50,7 +50,7 @@ const NumInfo = styled.div`
 const getTotalHandler = async () => {
     const { data } = await axios.get(`http://dev-admin.ittang.co.kr/api/statistic/user/total`, {
         headers: {
-            Authorization: `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2FzaXNidXNpbmVzcyJdLCJhZG1pbl91c2VyX2lkIjozNCwidXNlcl9uYW1lIjoiSUQ6aHMubGltIiwic2NvcGUiOlsicmVhZCJdLCJleHAiOjE2NDczMDU3MTUsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFZTUVOVF9SRUFEIiwiUk9MRV9BUlRJQ0xFIiwiUk9MRV9JVEVNIiwiUk9MRV9QQVlNRU5UX1VQREFURSIsIlJPTEVfUEFZTUVOVCIsIlJPTEVfUEFSVE5FUiIsIlJPTEVfSVRMT1VOREdFIiwiUk9MRV9EQVNIQk9BUkQiLCJST0xFX1VTRVIiLCJST0xFX05PVElDRSIsIlJPTEVfR09PRFMiLCJST0xFX0FETUlOIiwiUk9MRV9DT1VQT04iXSwianRpIjoiODVkYWM0MzAtY2I3Yi00YzE0LWI2OGQtN2EzZmU4MzdmZjlhIiwiY2xpZW50X2lkIjoib2FzaXNidXNpbmVzcyJ9.GPb0_wd_UvsBYVut1RtGsaLUSXCq9IsrG3FiDH0TrgU`,
+            Authorization: `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2FzaXNidXNpbmVzcyJdLCJhZG1pbl91c2VyX2lkIjozNCwidXNlcl9uYW1lIjoiSUQ6aHMubGltIiwic2NvcGUiOlsicmVhZCJdLCJleHAiOjE2NDczOTIyMTUsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFZTUVOVF9SRUFEIiwiUk9MRV9BUlRJQ0xFIiwiUk9MRV9JVEVNIiwiUk9MRV9QQVlNRU5UX1VQREFURSIsIlJPTEVfUEFZTUVOVCIsIlJPTEVfUEFSVE5FUiIsIlJPTEVfSVRMT1VOREdFIiwiUk9MRV9EQVNIQk9BUkQiLCJST0xFX1VTRVIiLCJST0xFX05PVElDRSIsIlJPTEVfR09PRFMiLCJST0xFX0FETUlOIiwiUk9MRV9DT1VQT04iXSwianRpIjoiM2M1M2U0ZDctM2MyMi00YWNmLThjNjktYTY3ZDYxYjlkYWZiIiwiY2xpZW50X2lkIjoib2FzaXNidXNpbmVzcyJ9.A27WyercfiYA5fynusQBTZA5L44schq7-LgkLRWRxio`,
         },
     });
     return data;
@@ -64,11 +64,45 @@ function chart() {
     const navigate = useNavigate();
     const { isLoading, data, isError } = useQuery("total", getTotalHandler);
 
+    const getDateStr = (myDate: any) => {
+        let month = myDate.getMonth();
+        let toStringMonth = "";
+        if (month < 10) toStringMonth = "0" + String(month + 1);
+        else toStringMonth = String(month + 1);
+        let day = myDate.getDate();
+        let toStringDay = "";
+        if (String(day).length === 1) toStringDay = "0" + String(day);
+        else toStringDay = String(day);
+        return `${myDate.getFullYear()}-${toStringMonth}-${toStringDay}`;
+    };
+
+    const today = () => {
+        const day = new Date();
+        return getDateStr(day);
+    };
+
+    const lastMonth = () => {
+        const day = new Date();
+        const monthOfYear = day.getMonth();
+        day.setMonth(monthOfYear - 1);
+        return getDateStr(day);
+    };
+
+    const [startDate, setStartDate] = useState<string>(lastMonth());
+    const [endDate, setEndDate] = useState<string>(today());
+
+    const startDateHandler = (date: string) => {
+        setStartDate(date);
+    };
+    const endDateHandler = (date: string) => {
+        setEndDate(date);
+    };
+
     return (
         <>
             <PageButton onClick={() => navigate("/")}>Go to Home</PageButton>
             {isLoading ? (
-                <div>Loading...</div>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>Loading...</div>
             ) : (
                 <CardBody>
                     <MainBody>
@@ -95,8 +129,16 @@ function chart() {
                             </NumInfoBox>
                         </NumInfoContainer>
                         <hr style={{ margin: "32px 0", borderColor: "rgba(0,0,21,.2)" }} />
-                        <DateFilter />
-                        <Charts />
+                        <DateFilter
+                            startDate={startDate}
+                            endDate={endDate}
+                            getDateStr={getDateStr}
+                            today={today}
+                            lastMonth={lastMonth}
+                            startDateHandler={startDateHandler}
+                            endDateHandler={endDateHandler}
+                        />
+                        <Charts startDate={startDate} endDate={endDate} />
                     </MainBody>
                 </CardBody>
             )}

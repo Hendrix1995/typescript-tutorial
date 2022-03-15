@@ -1,6 +1,5 @@
 import { useState } from "react";
 import styled from "styled-components";
-import axios from "axios";
 
 const DateFilterContainer = styled.div`
     display: flex;
@@ -43,35 +42,27 @@ const FilterButton = styled.button`
     }
 `;
 
-function DateFilter() {
-    const getDateStr = (myDate: any) => {
-        let month = myDate.getMonth();
-        let toStringMonth = "";
-        if (month < 10) toStringMonth = "0" + String(month + 1);
-        else toStringMonth = String(month + 1);
-        let day = myDate.getDate();
-        let toStringDay = "";
-        if (String(day).length === 1) toStringDay = "0" + String(day);
-        else toStringDay = String(day);
-        return `${myDate.getFullYear()}-${toStringMonth}-${toStringDay}`;
-    };
-
-    const today = () => {
-        const day = new Date();
-        return getDateStr(day);
-    };
-
+function DateFilter({
+    startDate,
+    endDate,
+    getDateStr,
+    today,
+    lastMonth,
+    startDateHandler,
+    endDateHandler,
+}: {
+    startDate: string;
+    endDate: string;
+    getDateStr: any;
+    today: any;
+    lastMonth: any;
+    startDateHandler: any;
+    endDateHandler: any;
+}) {
     const lastWeek = () => {
         const day = new Date();
         const dayOfMonth = day.getDate();
         day.setDate(dayOfMonth - 7);
-        return getDateStr(day);
-    };
-
-    const lastMonth = () => {
-        const day = new Date();
-        const monthOfYear = day.getMonth();
-        day.setMonth(monthOfYear - 1);
         return getDateStr(day);
     };
 
@@ -87,27 +78,6 @@ function DateFilter() {
         const dayOfYear = day.getFullYear();
         day.setFullYear(dayOfYear - 1);
         return getDateStr(day);
-    };
-
-    const [startDate, setStartDate] = useState<string>(today());
-    const [endDate, setEndDate] = useState<string>(today());
-
-    const startDateHandler = (date: string) => {
-        setStartDate(date);
-    };
-    const endDateHandler = (date: string) => {
-        setEndDate(date);
-    };
-
-    const searchParams = () => {};
-
-    const getDateHandler = async () => {
-        const { data } = await axios.get(`http://dev-admin.ittang.co.kr/api/statistic/user?startDate=${startDate}&endDate=${endDate}`, {
-            headers: {
-                Authorization: `bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdWQiOlsib2FzaXNidXNpbmVzcyJdLCJhZG1pbl91c2VyX2lkIjozNCwidXNlcl9uYW1lIjoiSUQ6aHMubGltIiwic2NvcGUiOlsicmVhZCJdLCJleHAiOjE2NDczMDU3MTUsImF1dGhvcml0aWVzIjpbIlJPTEVfUEFZTUVOVF9SRUFEIiwiUk9MRV9BUlRJQ0xFIiwiUk9MRV9JVEVNIiwiUk9MRV9QQVlNRU5UX1VQREFURSIsIlJPTEVfUEFZTUVOVCIsIlJPTEVfUEFSVE5FUiIsIlJPTEVfSVRMT1VOREdFIiwiUk9MRV9EQVNIQk9BUkQiLCJST0xFX1VTRVIiLCJST0xFX05PVElDRSIsIlJPTEVfR09PRFMiLCJST0xFX0FETUlOIiwiUk9MRV9DT1VQT04iXSwianRpIjoiODVkYWM0MzAtY2I3Yi00YzE0LWI2OGQtN2EzZmU4MzdmZjlhIiwiY2xpZW50X2lkIjoib2FzaXNidXNpbmVzcyJ9.GPb0_wd_UvsBYVut1RtGsaLUSXCq9IsrG3FiDH0TrgU`,
-            },
-        });
-        return data;
     };
 
     return (
