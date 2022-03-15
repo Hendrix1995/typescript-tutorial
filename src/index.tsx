@@ -12,16 +12,16 @@ import Chart from "./page/Chart";
 const queryClient = new QueryClient();
 
 ReactDOM.render(
-    <BrowserRouter>
-        <GlobalStyle />
-        <ThemeProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-                <Routes>
-                    <Route path="/" element={<App />} />
-                    <Route path="/chart" element={<Chart />} />
-                </Routes>
-            </QueryClientProvider>
-        </ThemeProvider>
-    </BrowserRouter>,
-    document.getElementById("root")
+  <BrowserRouter>
+    <GlobalStyle />
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <Routes>
+          <Route path="/" element={<App />} />
+          <Route path="/chart" element={<Chart />} />
+        </Routes>
+      </QueryClientProvider>
+    </ThemeProvider>
+  </BrowserRouter>,
+  document.getElementById("root")
 );
