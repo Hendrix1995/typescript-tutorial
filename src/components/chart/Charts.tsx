@@ -84,15 +84,35 @@ function Charts({ startDate, endDate }: { startDate: string; endDate: string }) 
   };
 
   const genderColorPicker = (el: any) => {
+    if (el === undefined) return;
     if (el.name === "FEMALE") return "#fbb4ae";
     if (el.name === "MALE") return "#b3cde3";
     else return "#CCEBC5";
   };
 
-  const SocialColorPicker = (el: any) => {
+  const socialColorPicker = (el: any) => {
+    if (el === undefined) return;
     if (el.name === "KAKAO") return "#FDD100";
     if (el.name === "NAVER") return "#19CE60";
     else return "#333333";
+  };
+
+  const genderPayloadHandler = (el: any) => {
+    if (el.payload[0].name === "FEMALE") return "여성";
+    if (el.payload[0].name === "MALE") return "남성";
+    if (el.payload[0].name === "UNKNOWN") return "알수없음";
+    else return "";
+  };
+
+  const socialPayloadHandler = (el: any) => {
+    if (el.payload[0].name === "KAKAO") return "카카오";
+    if (el.payload[0].name === "NAVER") return "네이버";
+    if (el.payload[0].name === "APPLE") return "애플";
+    else return "";
+  };
+
+  const replaceNumHandler = (num: number) => {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
 
   return (
@@ -154,7 +174,6 @@ function Charts({ startDate, endDate }: { startDate: string; endDate: string }) 
                         <Cell key={`cell-${index}`} fill={genderColorPicker(el)} />
                       ))}
                     </Pie>
-                    <Tooltip />
                     <Legend
                       content={() => (
                         <div style={{ display: "flex", justifyContent: "space-around" }}>
@@ -168,6 +187,30 @@ function Charts({ startDate, endDate }: { startDate: string; endDate: string }) 
                               </div>
                             </div>
                           ))}
+                        </div>
+                      )}
+                    />
+                    <Tooltip
+                      content={(el: any) => (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                            border: "1px solid white",
+                            boxShadow: "gray 2px 2px 2px 2px",
+                            backgroundColor: "#fff",
+                            borderRadius: "2px",
+                            padding: "4px",
+                          }}
+                        >
+                          <div style={{ width: "20px", height: "20px", backgroundColor: `${genderColorPicker(el.payload[0])}`, marginRight: "5px" }} />
+                          {el.payload[0] === undefined ? null : (
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                              <div style={{ marginRight: "5px" }}>{genderPayloadHandler(el)}:</div>
+                              <div style={{ fontWeight: "bold" }}>{replaceNumHandler(el.payload[0].value)}</div>
+                            </div>
+                          )}
+                          <div />
                         </div>
                       )}
                     />
@@ -205,16 +248,15 @@ function Charts({ startDate, endDate }: { startDate: string; endDate: string }) 
                       }}
                     >
                       {data?.countSocialTypeByDate.map((el: any, index: number) => (
-                        <Cell key={`cell-${index}`} fill={SocialColorPicker(el)} />
+                        <Cell key={`cell-${index}`} fill={socialColorPicker(el)} />
                       ))}
                     </Pie>
-                    <Tooltip />
                     <Legend
                       content={() => (
                         <div style={{ display: "flex", justifyContent: "space-around" }}>
                           {data?.countSocialTypeByDate.map((el: any, index: number) => (
                             <div key={index} style={{ display: "flex", alignItems: "center" }}>
-                              <div style={{ width: "15px", height: "15px", backgroundColor: `${SocialColorPicker(el)}`, borderRadius: "50px", marginRight: "5px" }} />
+                              <div style={{ width: "15px", height: "15px", backgroundColor: `${socialColorPicker(el)}`, borderRadius: "50px", marginRight: "5px" }} />
                               <div>
                                 {el.name === "KAKAO" ? "카카오" : null}
                                 {el.name === "NAVER" ? "네이버" : null}
@@ -222,6 +264,30 @@ function Charts({ startDate, endDate }: { startDate: string; endDate: string }) 
                               </div>
                             </div>
                           ))}
+                        </div>
+                      )}
+                    />
+                    <Tooltip
+                      content={(el: any) => (
+                        <div
+                          style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                            border: "1px solid white",
+                            boxShadow: "gray 2px 2px 2px 2px",
+                            backgroundColor: "#fff",
+                            borderRadius: "2px",
+                            padding: "4px",
+                          }}
+                        >
+                          <div style={{ width: "20px", height: "20px", backgroundColor: `${socialColorPicker(el.payload[0])}`, marginRight: "5px" }} />
+                          {el.payload[0] === undefined ? null : (
+                            <div style={{ display: "flex", alignItems: "center" }}>
+                              <div style={{ marginRight: "5px" }}>{socialPayloadHandler(el)}:</div>
+                              <div style={{ fontWeight: "bold" }}>{replaceNumHandler(el.payload[0].value)}</div>
+                            </div>
+                          )}
+                          <div />
                         </div>
                       )}
                     />
