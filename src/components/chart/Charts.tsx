@@ -204,7 +204,7 @@ function Charts({ startDate, endDate }: { startDate: string; endDate: string }) 
                           }}
                         >
                           <div style={{ width: "20px", height: "20px", backgroundColor: `${genderColorPicker(el.payload[0])}`, marginRight: "5px" }} />
-                          {el.payload[0] === undefined ? null : (
+                          {!el.payload[0] ? null : (
                             <div style={{ display: "flex", alignItems: "center" }}>
                               <div style={{ marginRight: "5px" }}>{genderPayloadHandler(el)}:</div>
                               <div style={{ fontWeight: "bold" }}>{replaceNumHandler(el.payload[0].value)}</div>
