@@ -72,24 +72,36 @@ const getPage = () => {
 
 function App() {
   const navigate = useNavigate();
-
   const [limit, setLimit] = useState<number>(getLimit());
   const [currentPage, setCurrentPage] = useState<number>(getPage());
+  const [beforeLimit, setBeforeLimit] = useState<number>(0);
   const [skip, setSkip] = useState<number>(0);
+  const [gapLimit, setGapLimit] = useState<number>(0);
+  const [gapLimitArr, setGapLimitArr] = useState<any>([]);
+
+  let limitArr = [];
+  for (let i = 1; i <= limit; i++) {
+    limitArr.push(i);
+  }
 
   const getDataHandler = async () => {
     const { data } = await axios.get(`https://dummyjson.com/products?limit=${limit}&skip=${skip}&select=title,price,images`);
     return data;
   };
 
-  const { isLoading, data, isError } = useQuery(["items", { limit, skip, currentPage }], getDataHandler);
-  // 케싱
-  // 두번 네트워크 요청 보내는거 찾아서 지우기
+  const { isLoading, data, isError, isPreviousData } = useQuery(["items", { limit, skip, currentPage }], getDataHandler, {
+    enabled: !!limit,
+    keepPreviousData: true,
+    refetchOnWindowFocus: false,
+  });
+
   const limitChangeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setBeforeLimit(limit);
     setLimit(Number(e.target.value));
   };
 
   const pageChangedHandler = (pageNum: number) => {
+    setGapLimitArr([]);
     setCurrentPage(pageNum);
   };
 
@@ -98,6 +110,8 @@ function App() {
     urlSearchParams.set("limit", String(limit));
     urlSearchParams.set("page", String(currentPage));
     window.history.replaceState("replace", "null", url.href);
+
+    limit - beforeLimit < 0 ? setGapLimit(0) : setGapLimit(limit - beforeLimit);
   }, [limit, currentPage]);
 
   useEffect(() => {
@@ -107,38 +121,61 @@ function App() {
     }
   }, [skip]);
 
-  if (isError) return <div style={{ display: "flex", justifyContent: "center" }}>다시 시도해 주세요</div>;
+  useEffect(() => {
+    let temp = [];
+    for (let i = 1; i <= gapLimit; i++) {
+      temp.push(i);
+    }
+    setGapLimitArr(temp);
+  }, [gapLimit]);
 
-  const limitArr = [];
-  for (let i = 1; i <= limit; i++) {
-    limitArr.push(i);
-  }
+  if (isError) return <div style={{ display: "flex", justifyContent: "center" }}>다시 시도해 주세요</div>;
 
   return (
     <>
       <div style={{ display: "flex", justifyContent: "flex-start", alignItems: "center" }}>
         <PageButton onClick={() => navigate("/chart")}>Go to Chart</PageButton>
       </div>
-      {isLoading ? (
-        <>
-          <ItemContainer>
+      <ItemContainer>
+        {isLoading ? (
+          <>
             {limitArr.map((el: number) => (
               <Skeleton key={el} />
             ))}
-          </ItemContainer>
-          <Pagination limit={limit} pageChangedHandler={pageChangedHandler} currentPage={currentPage} />
-        </>
-      ) : (
-        <>
-          <ItemContainer>
-            {data.products.map((item: DataType) => (
-              <Contents key={item.id} id={item.id} title={item.title} price={item.price} images={item.images} />
-            ))}
-          </ItemContainer>
-          <Pagination limit={limit} pageChangedHandler={pageChangedHandler} currentPage={currentPage} />
-          <FilterDropdown limitChangeHandler={limitChangeHandler} limit={limit} />
-        </>
-      )}
+          </>
+        ) : (
+          <>
+            {isPreviousData ? (
+              <>
+                {gapLimit === 0 ? (
+                  <>
+                    {data.products.map((item: DataType) => (
+                      <Contents key={item.id} id={item.id} title={item.title} price={item.price} images={item.images} />
+                    ))}
+                  </>
+                ) : (
+                  <>
+                    {data.products.map((item: DataType) => (
+                      <Contents key={item.id} id={item.id} title={item.title} price={item.price} images={item.images} />
+                    ))}
+                    {gapLimitArr.map((el: number) => (
+                      <Skeleton key={el} />
+                    ))}
+                  </>
+                )}
+              </>
+            ) : (
+              <>
+                {data.products.map((item: DataType) => (
+                  <Contents key={item.id} id={item.id} title={item.title} price={item.price} images={item.images} />
+                ))}
+              </>
+            )}
+          </>
+        )}
+      </ItemContainer>
+      <FilterDropdown limitChangeHandler={limitChangeHandler} limit={limit} />
+      <Pagination limit={limit} pageChangedHandler={pageChangedHandler} currentPage={currentPage} />
     </>
   );
 }
